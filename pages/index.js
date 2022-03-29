@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/material'
 import useSWR from 'swr'
+import fetcher from '../utils/fetcher';
 
 export default function Home() {
-  const fetcher = (url) => fetch(url).then((res) => res.json());
   const { data, error } = useSWR('/api/', fetcher);
   return (
     <Box>
