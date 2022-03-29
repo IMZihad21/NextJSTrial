@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
     switch (method) {
         case 'GET':
-            res.status(200).json({ message: "Wokring!" })
+            res.status(200).json({ message: "Working!" })
             break;
 
         default:
