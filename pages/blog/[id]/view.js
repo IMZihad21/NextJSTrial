@@ -27,7 +27,7 @@ const View = ({ blogData }) => {
 // It may be called again, on a serverless function, if
 // revalidation is enabled and a new request comes in
 export async function getStaticProps({ params }) {
-    const res = await fetch('https://nextjsmongoosetest.herokuapp.com/api/blog');
+    const res = await fetch('https://nextmongoose.vercel.app/api/blog');
     const blogs = await res.json()
     const blogData = blogs.data.find((item) => item._id === params.id);
 
@@ -46,7 +46,7 @@ export async function getStaticProps({ params }) {
 // It may be called again, on a serverless function, if
 // the path has not been generated.
 export async function getStaticPaths() {
-    const res = await fetch('https://nextjsmongoosetest.herokuapp.com/api/blog');
+    const res = await fetch('https://nextmongoose.vercel.app/api/blog');
     const blogs = await res.json()
     // Get the paths we want to pre-render based on posts
     const paths = blogs?.data?.map((blog) => ({
