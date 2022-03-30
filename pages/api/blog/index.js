@@ -16,6 +16,11 @@ export default async function handler(req, res) {
             }
             break
         case 'POST':
+            // validate req body
+            const { blog_name, blog_content } = req.body
+            if (!blog_name || !blog_content) {
+                return res.status(400).json({ success: false, message: 'Please fill all required fields' })
+            }
             try {
                 const pet = await Blog.create(
                     req.body
