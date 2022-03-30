@@ -1,23 +1,19 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import useSWR, { useSWRConfig } from 'swr';
 import { useForm } from 'react-hook-form';
 import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import fetcher from '../../../utils/fetcher';
 
-export default function EditBlog() {
+export default function EditBlog({ blogData }) {
+    const { register, handleSubmit, reset, setValue } = useForm();
     const router = useRouter()
     const { id } = router.query;
-    const { data } = useSWR(id ? `/api/blog/${id}` : null, fetcher, {
-        onSuccess: (data) => {
-            setValue('blog_name', data.data.blog_name);
-            setValue('blog_content', data.data.blog_content);
-        }
-    });
-    const { register, handleSubmit, reset, setValue } = useForm();
-    const { mutate } = useSWRConfig()
+
+    React.useEffect(() => {
+        setValue('blog_name', blogData.blog_name);
+        setValue('blog_content', blogData.blog_content);
+    }, [blogData, setValue])
 
     const handleAddBlog = data => {
 
@@ -29,8 +25,7 @@ export default function EditBlog() {
             body: JSON.stringify(data),
         })
             .then(() => {
-                mutate('/api/blog')
-                router.push("/blog")
+                router.back()
                 reset();
             })
             .catch(err => console.log(err))
@@ -70,4 +65,40 @@ export default function EditBlog() {
             </Box>
         </Box>
     );
+}
+
+// This function gets called at build time on server-side.
+// It may be called again, on a serverless function, if
+// revalidation is enabled and a new request comes in
+export async function getStaticProps({ params }) {
+    const res = await fetch('https://nextjsmongoosetest.herokuapp.com/api/blog');
+    const blogs = await res.json()
+    const blogData = blogs.data.find((item) => item._id === params.id);
+
+    return {
+        props: {
+            blogData,
+        },
+        // Next.js will attempt to re-generate the page:
+        // - When a request comes in
+        // - At most once every 10 seconds
+        revalidate: 100, // In seconds
+    }
+}
+
+// This function gets called at build time on server-side.
+// It may be called again, on a serverless function, if
+// the path has not been generated.
+export async function getStaticPaths() {
+    const res = await fetch('https://nextjsmongoosetest.herokuapp.com/api/blog');
+    const blogs = await res.json()
+    // Get the paths we want to pre-render based on posts
+    const paths = blogs?.data?.map((blog) => ({
+        params: { id: blog._id },
+    }))
+
+    // We'll pre-render only these paths at build time.
+    // { fallback: blocking } will server-render pages
+    // on-demand if the path doesn't exist.
+    return { paths, fallback: 'blocking' }
 }
