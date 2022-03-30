@@ -10,9 +10,8 @@ import fetcher from '../../../utils/fetcher';
 export default function EditBlog() {
     const router = useRouter()
     const { id } = router.query;
-    useSWR(id ? `/api/blog/${id}` : null, fetcher, {
-        onSuccess: (data, key, config) => {
-            console.log(data)
+    const { data } = useSWR(id ? `/api/blog/${id}` : null, fetcher, {
+        onSuccess: (data) => {
             setValue('blog_name', data.data.blog_name);
             setValue('blog_content', data.data.blog_content);
         }
@@ -22,8 +21,8 @@ export default function EditBlog() {
 
     const handleAddBlog = data => {
 
-        fetch('/api/blog', {
-            method: 'POST',
+        fetch(`/api/blog/${id}`, {
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -31,6 +30,7 @@ export default function EditBlog() {
         })
             .then(() => {
                 mutate('/api/blog')
+                router.push("/blog")
                 reset();
             })
             .catch(err => console.log(err))
@@ -48,7 +48,6 @@ export default function EditBlog() {
                     margin="dense"
                     id="blog_name"
                     name='blog_name'
-                    label="Blog Title"
                     type="text"
                     fullWidth
                     {...register("blog_name")}
@@ -56,7 +55,6 @@ export default function EditBlog() {
                 <TextField
                     id="blog_content"
                     name='blog_content'
-                    label="Blog Content"
                     type="text"
                     fullWidth
                     multiline
