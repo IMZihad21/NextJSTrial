@@ -2,9 +2,10 @@ import { Box, Button, CircularProgress, Link, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useSWR, { useSWRConfig } from 'swr';
 import AddBlog from '../../components/AddBlog';
-import fetcher from '../../utils/fetcher';
+import { useRouter } from 'next/router';
 
 const Blog = ({ blogs }) => {
+    const router = useRouter()
     const [addBlogModalOpen, setAddBlogModalOpen] = useState(false);
     // const { data, error } = useSWR('/api/blog', fetcher);
     const { mutate } = useSWRConfig()
@@ -16,7 +17,7 @@ const Blog = ({ blogs }) => {
             },
         })
         if (res.status === 200) {
-            mutate('/api/blog')
+            router.replace(router.asPath);
         }
     }
 
@@ -68,7 +69,7 @@ export async function getStaticProps() {
         // Next.js will attempt to re-generate the page:
         // - When a request comes in
         // - At most once every 10 seconds
-        revalidate: 10, // In seconds
+        revalidate: 1, // In seconds
     }
 }
 
