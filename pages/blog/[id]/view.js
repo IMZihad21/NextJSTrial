@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { useRouter } from 'next/router'
 import fetcher from '../../../utils/fetcher';
 
-const View = ({ blogData }) => {
+export default function View({ blogData }) {
     const router = useRouter();
     return (
         <Box sx={{ mx: 10, my: 5 }}>
@@ -26,15 +26,16 @@ const View = ({ blogData }) => {
 // This function gets called at build time on server-side.
 // It may be called again, on a serverless function, if
 // revalidation is enabled and a new request comes in
-export async function getServerSideProps({ params }) {
+export async function getStaticProps({ params }) {
     const res = await fetch('https://nextmongoose.vercel.app/api/blog');
     const blogs = await res.json()
-    const blogData = blogs.data.find((item) => item._id === params.id);
+    const blogData = blogs?.data.find((item) => item._id === params.id);
 
     return {
         props: {
-            blogData,
-        }
+            blogData
+        },
+        revalidate: 1
     }
 }
 
@@ -54,5 +55,3 @@ export async function getStaticPaths() {
     // on-demand if the path doesn't exist.
     return { paths, fallback: 'blocking' }
 }
-
-export default View
