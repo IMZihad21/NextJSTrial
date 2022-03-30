@@ -6,32 +6,30 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useSWRConfig } from 'swr';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 
 export default function AddBlog({ open, setOpen }) {
     const { register, handleSubmit, reset } = useForm();
-    const { mutate } = useSWRConfig()
+    const router = useRouter()
 
     const handleClose = () => {
         setOpen(false);
     };
 
-    const handleAddBlog = data => {
-
-        fetch('/api/blog', {
+    const handleAddBlog = async data => {
+        const res = await fetch('/api/blog', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
         })
-            .then(() => {
-                mutate('/api/blog')
-                setOpen(false);
-                reset();
-            })
-            .catch(err => console.log(err))
+        if (res.status === 201) {
+            setOpen(false);
+            reset();
+            router.replace(router.asPath);
+        }
     };
 
     return (

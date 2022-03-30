@@ -26,7 +26,6 @@ export default function EditBlog({ blogData }) {
         })
             .then(() => {
                 router.back()
-                reset();
             })
             .catch(err => console.log(err))
     };
