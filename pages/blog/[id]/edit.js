@@ -39,6 +39,11 @@ export default function EditBlog() {
     return (
         <Box component='form' onSubmit={handleSubmit(handleAddBlog)} >
             <Typography>Edit Blog</Typography>
+            <Box sx={{ display: "flex", justifyContent: "end" }}>
+                <Button variant='contained' onClick={() => router.back()}>
+                    Go Back
+                </Button>
+            </Box>
             <Box>
                 <Typography>
                     Add a new blog with blog tile and blog content.
@@ -61,7 +66,7 @@ export default function EditBlog() {
                     rows={4}
                     {...register("blog_content")}
                 />
-                <Button variant='contained' type='submit' >Edit Blog</Button>
+                <Button variant='contained' type='submit' sx={{ my: 2 }} >Edit Blog</Button>
             </Box>
         </Box>
     );
