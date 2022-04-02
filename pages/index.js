@@ -2,7 +2,6 @@ import { Box, Typography } from '@mui/material'
 import Link from 'next/link';
 
 export async function getStaticProps() {
-  await dbConnect();
   const api = {
     message: "Working!"
   }
