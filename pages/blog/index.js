@@ -1,14 +1,22 @@
 import { Box, Button, CircularProgress, Link, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import useSWR, { useSWRConfig } from 'swr';
 import AddBlog from '../../components/AddBlog';
 import { useRouter } from 'next/router';
+
+export async function getStaticProps() {
+    const res = await fetch(`${process.env.API_HOST}/api/blog`);
+    const blogs = await res.json()
+    return {
+        props: {
+            blogs: blogs?.data,
+        },
+        revalidate: 1,
+    }
+}
 
 const Blog = ({ blogs }) => {
     const router = useRouter()
     const [ addBlogModalOpen, setAddBlogModalOpen ] = useState(false);
-    // const { data, error } = useSWR('/api/blog', fetcher);
-    const { mutate } = useSWRConfig()
     const handleBlogDelete = async (id) => {
         const res = await fetch(`/api/blog/${id}`, {
             method: 'DELETE',
@@ -53,17 +61,6 @@ const Blog = ({ blogs }) => {
             <AddBlog open={addBlogModalOpen} setOpen={setAddBlogModalOpen} />
         </Box>
     )
-}
-
-export async function getServerSideProps() {
-    const res = await fetch(`${process.env.API_HOST}/api/blog`);
-    const blogs = await res.json()
-
-    return {
-        props: {
-            blogs: blogs?.data,
-        }
-    }
 }
 
 export default Blog

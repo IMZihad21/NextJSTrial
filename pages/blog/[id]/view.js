@@ -1,8 +1,18 @@
 import { Box, Button, Typography } from '@mui/material'
 import React from 'react'
-import useSWR from 'swr';
 import { useRouter } from 'next/router'
-import fetcher from '../../../utils/fetcher';
+
+export async function getServerSideProps({ params }) {
+    const res = await fetch(`${process.env.API_HOST}/api/blog`);
+    const blogs = await res.json()
+    const blogData = blogs?.data.find((item) => item._id === params.id);
+
+    return {
+        props: {
+            blogData
+        }
+    }
+}
 
 export default function View({ blogData }) {
     const router = useRouter();
@@ -21,19 +31,4 @@ export default function View({ blogData }) {
             </Typography>
         </Box>
     )
-}
-
-// This function gets called at build time on server-side.
-// It may be called again, on a serverless function, if
-// revalidation is enabled and a new request comes in
-export async function getServerSideProps({ params }) {
-    const res = await fetch(`${process.env.API_HOST}/api/blog`);
-    const blogs = await res.json()
-    const blogData = blogs?.data.find((item) => item._id === params.id);
-
-    return {
-        props: {
-            blogData
-        }
-    }
 }

@@ -5,18 +5,26 @@ import { useForm } from 'react-hook-form';
 import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 
+export async function getServerSideProps({ params }) {
+    const res = await fetch(`${process.env.API_HOST}/api/blog`);
+    const blogs = await res.json()
+    const blogData = blogs?.data.find((item) => item._id === params.id);
+
+    return {
+        props: {
+            blogData
+        }
+    }
+}
+
 export default function EditBlog({ blogData }) {
     const { register, handleSubmit, reset, setValue } = useForm();
     const router = useRouter()
     const { id } = router.query;
-
-    React.useEffect(() => {
-        setValue('blog_name', blogData.blog_name);
-        setValue('blog_content', blogData.blog_content);
-    }, [ blogData, setValue ])
+    setValue('blog_name', blogData?.blog_name);
+    setValue('blog_content', blogData?.blog_content);
 
     const handleAddBlog = data => {
-
         fetch(`/api/blog/${id}`, {
             method: 'PATCH',
             headers: {
@@ -64,19 +72,4 @@ export default function EditBlog({ blogData }) {
             </Box>
         </Box>
     );
-}
-
-// This function gets called at build time on server-side.
-// It may be called again, on a serverless function, if
-// revalidation is enabled and a new request comes in
-export async function getServerSideProps({ params }) {
-    const res = await fetch(`${process.env.API_HOST}/api/blog`);
-    const blogs = await res.json()
-    const blogData = blogs?.data.find((item) => item._id === params.id);
-
-    return {
-        props: {
-            blogData
-        }
-    }
 }
