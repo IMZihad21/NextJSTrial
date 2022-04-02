@@ -54,7 +54,7 @@ const Blogs = ({ blogs }) => {
                         {blog.blog_content}
                     </Typography>
                     <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
-                        <Button component={Link} href={`/blog/${blog._id}/view`} variant='contained' sx={{ height: 30 }}>
+                        <Button component={Link} href={`/blog/${blog._id}`} variant='contained' sx={{ height: 30 }}>
                             View
                         </Button>
                         <Button component={Link} href={`/blog/${blog._id}/edit`} variant='contained' sx={{ height: 30 }}>

@@ -4,25 +4,30 @@ import TextField from '@mui/material/TextField';
 import { useForm } from 'react-hook-form';
 import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import useSWR, { mutate } from 'swr';
+import fetcher from '../../../utils/fetcher';
 
 export async function getServerSideProps({ params }) {
-    const res = await fetch(`${process.env.API_HOST}/api/blog`);
-    const blogs = await res.json()
-    const blogData = blogs?.data.find((item) => item._id === params.id);
+    const res = await fetch(`${process.env.API_HOST}/api/blog/${params.id}`);
+    const blog = await res.json()
 
     return {
         props: {
-            blogData
+            blog
         }
     }
 }
 
-export default function EditBlog({ blogData }) {
-    const { register, handleSubmit, reset, setValue } = useForm();
+export default function EditBlog({ blog }) {
     const router = useRouter()
     const { id } = router.query;
-    setValue('blog_name', blogData?.blog_name);
-    setValue('blog_content', blogData?.blog_content);
+    const { data } = useSWR(`/api/blog/${id}`, fetcher, { fallbackData: blog })
+    const { register, handleSubmit, setValue } = useForm();
+
+    React.useEffect(() => {
+        setValue('blog_name', data?.blog_name);
+        setValue('blog_content', data?.blog_content);
+    }, [ data, setValue ])
 
     const handleAddBlog = data => {
         fetch(`/api/blog/${id}`, {
@@ -33,7 +38,7 @@ export default function EditBlog({ blogData }) {
             body: JSON.stringify(data),
         })
             .then(() => {
-                router.back()
+                router.back();
             })
             .catch(err => console.log(err))
     };

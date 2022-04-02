@@ -16,7 +16,7 @@ export default async function handler(req, res) {
                 if (!blog) {
                     return res.status(400).json({ error: "Not Found" })
                 }
-                res.status(200).json({ success: true, data: blog })
+                res.status(200).json(blog)
             } catch (error) {
                 res.status(400).json({ error: error.message })
             }
@@ -29,9 +29,9 @@ export default async function handler(req, res) {
                     runValidators: true,
                 })
                 if (!blog) {
-                    return res.status(400).json({ success: false })
+                    return res.status(400).json({ error: "Not Found" })
                 }
-                res.status(200).json({ success: true, data: blog })
+                res.status(200).json(blog)
             } catch (error) {
                 res.status(400).json({ error: error.message })
             }
@@ -43,14 +43,14 @@ export default async function handler(req, res) {
                 if (!deletedBlog) {
                     return res.status(400).json({ error: "Not Found" })
                 }
-                res.status(200).json({ success: true })
+                res.status(200).json({ message: "Deleted" })
             } catch (error) {
                 res.status(400).json({ error: error.message })
             }
             break
 
         default:
-            res.status(400).json({ error: "Not Found" })
+            res.status(400).json({ message: 'Method not allowed' })
             break
     }
 }
