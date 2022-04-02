@@ -12,9 +12,8 @@ export async function getStaticProps({ params }) {
     const blog = JSON.parse(JSON.stringify(res));
 
     return {
-        props: {
-            blog
-        }
+        props: { blog },
+        revalidate: 1,
     }
 }
 
