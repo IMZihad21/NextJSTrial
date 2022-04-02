@@ -13,7 +13,7 @@ export default function EditBlog({ blogData }) {
     React.useEffect(() => {
         setValue('blog_name', blogData.blog_name);
         setValue('blog_content', blogData.blog_content);
-    }, [blogData, setValue])
+    }, [ blogData, setValue ])
 
     const handleAddBlog = data => {
 
@@ -70,7 +70,7 @@ export default function EditBlog({ blogData }) {
 // It may be called again, on a serverless function, if
 // revalidation is enabled and a new request comes in
 export async function getServerSideProps({ params }) {
-    const res = await fetch('https://nextmongoose.vercel.app/api/blog');
+    const res = await fetch(`${process.env.API_HOST}/api/blog`);
     const blogs = await res.json()
     const blogData = blogs?.data.find((item) => item._id === params.id);
 

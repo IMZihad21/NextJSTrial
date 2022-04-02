@@ -27,7 +27,7 @@ export default function View({ blogData }) {
 // It may be called again, on a serverless function, if
 // revalidation is enabled and a new request comes in
 export async function getServerSideProps({ params }) {
-    const res = await fetch('https://nextmongoose.vercel.app/api/blog');
+    const res = await fetch(`${process.env.API_HOST}/api/blog`);
     const blogs = await res.json()
     const blogData = blogs?.data.find((item) => item._id === params.id);
 

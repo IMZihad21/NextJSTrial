@@ -3,14 +3,24 @@ import Link from 'next/link';
 import useSWR from 'swr'
 import fetcher from '../utils/fetcher';
 
-export default function Home() {
-  const { data, error } = useSWR('/api/', fetcher);
+export default function Home({ api }) {
   return (
     <Box>
       <Typography>
-        {error ? "Failed" : data?.message}
+        {api?.message}
       </Typography>
       <Link href='/blog'>Blogs</Link>
     </Box>
   )
+}
+
+export async function getServerSideProps() {
+  const res = await fetch(`${process.env.API_HOST}/api`);
+  const api = await res.json()
+
+  return {
+    props: {
+      api
+    }
+  }
 }
