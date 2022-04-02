@@ -6,16 +6,13 @@ import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import fetcher from '../../../utils/fetcher';
+import dbConnect from '../../../utils/dbConnect';
+import Blog from '../../../models/Blog';
 
 export async function getStaticProps({ params }) {
     await dbConnect()
-    let blog;
-    try {
-        const res = await Blog.findById(params.id)
-        blog = JSON.parse(JSON.stringify(res));
-    } catch (error) {
-        console.log(error);
-    }
+    const res = await Blog.findById(params.id)
+    const blog = JSON.parse(JSON.stringify(res));
 
     return {
         props: {
@@ -26,14 +23,8 @@ export async function getStaticProps({ params }) {
 
 export async function getStaticPaths() {
     await dbConnect();
-    let blogs;
-    try {
-        const res = await Blog.find({});
-        blogs = JSON.parse(JSON.stringify(res))
-    }
-    catch (error) {
-        console.log(error);
-    }
+    const res = await Blog.find({});
+    const blogs = JSON.parse(JSON.stringify(res))
 
     const paths = blogs.map((blog) => ({
         params: { id: blog._id },

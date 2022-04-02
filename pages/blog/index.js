@@ -8,14 +8,8 @@ import fetcher from '../../utils/fetcher';
 
 export async function getStaticProps() {
     await dbConnect();
-    let blogs;
-    try {
-        const res = await Blog.find({});
-        blogs = JSON.parse(JSON.stringify(res))
-    }
-    catch (error) {
-        console.log(error);
-    }
+    const res = await Blog.find({});
+    const blogs = JSON.parse(JSON.stringify(res))
 
     return {
         props: { blogs },
