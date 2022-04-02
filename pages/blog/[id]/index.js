@@ -3,16 +3,41 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr';
 import fetcher from '../../../utils/fetcher';
+import Blog from '../../../models/Blog';
 
-export async function getServerSideProps({ params }) {
-    const res = await fetch(`${process.env.API_HOST}/api/blog/${params.id}`);
-    const blog = await res.json()
+export async function getStaticProps({ params }) {
+    await dbConnect()
+    let blog;
+    try {
+        const res = await Blog.findById(params.id)
+        blog = JSON.parse(JSON.stringify(res));
+    } catch (error) {
+        console.log(error);
+    }
 
     return {
         props: {
             blog
         }
     }
+}
+
+export async function getStaticPaths() {
+    await dbConnect();
+    let blogs;
+    try {
+        const res = await Blog.find({});
+        blogs = JSON.parse(JSON.stringify(res))
+    }
+    catch (error) {
+        console.log(error);
+    }
+
+    const paths = blogs.map((blog) => ({
+        params: { id: blog._id },
+    }))
+
+    return { paths, fallback: 'blocking' }
 }
 
 export default function View({ blog }) {
