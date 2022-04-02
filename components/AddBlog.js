@@ -7,11 +7,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
+import { mutate } from 'swr';
 
 export default function AddBlog({ open, setOpen }) {
     const { register, handleSubmit, reset } = useForm();
-    const router = useRouter()
 
     const handleClose = () => {
         setOpen(false);
@@ -28,7 +27,7 @@ export default function AddBlog({ open, setOpen }) {
         if (res.status === 201) {
             setOpen(false);
             reset();
-            router.replace(router.asPath);
+            mutate('/api/blog');
         }
     };
 

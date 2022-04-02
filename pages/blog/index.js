@@ -1,21 +1,30 @@
-import { Box, Button, CircularProgress, Link, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Box, Button, Link, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import AddBlog from '../../components/AddBlog';
-import { useRouter } from 'next/router';
+import Blog from '../../models/Blog';
+import dbConnect from '../../utils/dbConnect';
+import useSWR, { mutate } from 'swr';
+import fetcher from '../../utils/fetcher';
 
 export async function getStaticProps() {
-    const res = await fetch(`${process.env.API_HOST}/api/blog`);
-    const blogs = await res.json()
+    await dbConnect();
+    let blogs;
+    try {
+        const res = await Blog.find({});
+        blogs = JSON.parse(JSON.stringify(res))
+    }
+    catch (error) {
+        console.log(error);
+    }
+
     return {
-        props: {
-            blogs: blogs?.data,
-        },
+        props: { blogs },
         revalidate: 1,
     }
 }
 
-const Blog = ({ blogs }) => {
-    const router = useRouter()
+const Blogs = ({ blogs }) => {
+    const { data } = useSWR("/api/blog", fetcher, { fallbackData: blogs })
     const [ addBlogModalOpen, setAddBlogModalOpen ] = useState(false);
     const handleBlogDelete = async (id) => {
         const res = await fetch(`/api/blog/${id}`, {
@@ -25,7 +34,7 @@ const Blog = ({ blogs }) => {
             },
         })
         if (res.status === 200) {
-            router.replace(router.asPath);
+            mutate('/api/blog')
         }
     }
 
@@ -36,7 +45,7 @@ const Blog = ({ blogs }) => {
                     Add New
                 </Button>
             </Box>
-            {blogs?.map(blog => (
+            {data?.map(blog => (
                 <Box key={blog._id} sx={{ mb: 3 }}>
                     <Typography component='h5' variant='h5'>
                         {blog.blog_name}
@@ -63,4 +72,4 @@ const Blog = ({ blogs }) => {
     )
 }
 
-export default Blog
+export default Blogs

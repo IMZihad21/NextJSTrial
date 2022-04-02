@@ -2,8 +2,10 @@ import { Box, Typography } from '@mui/material'
 import Link from 'next/link';
 
 export async function getStaticProps() {
-  const res = await fetch(`${process.env.API_HOST}/api`);
-  const api = await res.json()
+  await dbConnect();
+  const api = {
+    message: "Working!"
+  }
 
   return {
     props: {

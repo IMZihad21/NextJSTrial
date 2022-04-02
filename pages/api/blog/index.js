@@ -9,29 +9,29 @@ export default async function handler(req, res) {
     switch (method) {
         case 'GET':
             try {
-                const pets = await Blog.find({})
-                res.status(200).json({ success: true, data: pets })
+                const blogs = await Blog.find({})
+                res.status(200).json(blogs)
             } catch (error) {
-                res.status(400).json({ success: false })
+                res.status(400).json({ error: error.message })
             }
             break
         case 'POST':
             // validate req body
             const { blog_name, blog_content } = req.body
             if (!blog_name || !blog_content) {
-                return res.status(400).json({ success: false, message: 'Please fill all required fields' })
+                return res.status(400).json({ message: 'Please fill all required fields' })
             }
             try {
-                const pet = await Blog.create(
+                const blog = await Blog.create(
                     req.body
                 )
-                res.status(201).json({ success: true, data: pet })
+                res.status(201).json(blog)
             } catch (error) {
                 res.status(400).json({ error: error.message })
             }
             break
         default:
-            res.status(400).json({ success: false })
+            res.status(400).json({ message: 'Method not allowed' })
             break
     }
 }
