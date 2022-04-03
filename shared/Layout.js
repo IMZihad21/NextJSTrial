@@ -1,12 +1,14 @@
 import React from 'react'
 import { Box, createTheme, ThemeProvider } from '@mui/material';
 import Head from 'next/head';
+import NavBar from './NavBar';
+import Footer from './Footer';
 
-const Layout = ({ children, ...props }) => {
+const Layout = ({ children }) => {
     const theme = React.useMemo(() =>
         createTheme({
             typography: {
-                fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+                fontFamily: [ "Source Sans Pro", "sans-serif" ].join(","),
             },
             palette: {
                 // primary: {
@@ -21,13 +23,17 @@ const Layout = ({ children, ...props }) => {
     );
 
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme} >
             <Head>
                 <title>Mango Test</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
-            <Box component='main' {...props} >
-                {children}
+            <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+                <NavBar />
+                <Box component='main' sx={{ flexGrow: 1 }} >
+                    {children}
+                </Box>
+                <Footer />
             </Box>
         </ThemeProvider >
     )
