@@ -1,9 +1,9 @@
 import { Box, Typography } from '@mui/material'
 import Link from 'next/link';
-import { getJWTtoken } from '../utils/auth';
+import { verifyToken } from '../utils/auth';
 
 export async function getServerSideProps(context) {
-  const token = getJWTtoken(context.req)
+  const token = context.req.cookies['token']
 
   const api = {
     message: "Working!"
