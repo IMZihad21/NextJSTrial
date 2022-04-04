@@ -44,8 +44,9 @@ const NavBar = () => {
                     <Typography
                         variant="h6"
                         noWrap
-                        component="div"
-                        sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+                        component={Link}
+                        href='/'
+                        sx={{ color: "white", textDecoration: "none", mr: 2, display: { xs: 'none', md: 'flex' } }}
                     >
                         LOGO
                     </Typography>
@@ -89,8 +90,9 @@ const NavBar = () => {
                     <Typography
                         variant="h6"
                         noWrap
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
+                        component={Link}
+                        href='/'
+                        sx={{ color: "white", textDecoration: "none", flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
                     >
                         LOGO
                     </Typography>
