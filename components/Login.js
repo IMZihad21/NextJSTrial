@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import Router from 'next/router';
 import Cookies from 'js-cookie';
 
-export default function Login() {
+export default function Login({ redirectUrl }) {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const handleLogin = data => {
         const loginAPI = `${window.location.origin}/api/auth/login`;
@@ -18,7 +18,7 @@ export default function Login() {
             .then(res => res.json())
             .then(res => {
                 Cookies.set('token', res.token)
-                Router.push('/')
+                Router.push(redirectUrl)
             })
     }
 
