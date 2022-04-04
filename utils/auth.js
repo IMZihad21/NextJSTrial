@@ -7,7 +7,7 @@ const JWT_KEY = process.env.JWT_KEY
 export function verifyToken(jwtToken) {
     try {
         return jwt.verify(jwtToken, JWT_KEY)
-    } catch (err) {
+    } catch (e) {
         return null
     }
 }
@@ -15,5 +15,5 @@ export function verifyToken(jwtToken) {
 export function setLogout(e) {
     e.preventDefault()
     Cookies.remove('token')
-    Router.push('/')
+    Router.reload(window.location.pathname)
 }

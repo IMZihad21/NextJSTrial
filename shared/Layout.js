@@ -23,19 +23,21 @@ const Layout = ({ children }) => {
     );
 
     return (
-        <ThemeProvider theme={theme} >
+        <React.Fragment>
             <Head>
                 <title>Mango Test</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
             <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-                <NavBar />
-                <Box component='main' sx={{ flexGrow: 1, m: 1 }} >
-                    {children}
-                </Box>
-                <Footer />
+                <ThemeProvider theme={theme} >
+                    <NavBar />
+                    <Box component='main' sx={{ flexGrow: 1, m: 1 }} >
+                        {children}
+                    </Box>
+                    <Footer />
+                </ThemeProvider >
             </Box>
-        </ThemeProvider >
+        </React.Fragment>
     )
 }
 

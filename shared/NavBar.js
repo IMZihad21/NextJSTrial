@@ -12,11 +12,11 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from '@mui/material';
+import { setLogout } from '../utils/auth';
 
 const pages = [
     { name: 'Blog', url: '/blog' },
 ];
-const settings = ['Logout'];
 
 const NavBar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -132,11 +132,9 @@ const NavBar = () => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
-                            ))}
+                            <MenuItem onClick={e => setLogout(e)}>
+                                <Typography textAlign="center">Log Out</Typography>
+                            </MenuItem>
                         </Menu>
                     </Box>
                 </Toolbar>
