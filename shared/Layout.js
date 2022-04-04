@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
     const theme = React.useMemo(() =>
         createTheme({
             typography: {
-                fontFamily: [ "Source Sans Pro", "sans-serif" ].join(","),
+                fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
             },
             palette: {
                 // primary: {
@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
             </Head>
             <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
                 <NavBar />
-                <Box component='main' sx={{ flexGrow: 1 }} >
+                <Box component='main' sx={{ flexGrow: 1, m: 1 }} >
                     {children}
                 </Box>
                 <Footer />

@@ -34,7 +34,7 @@ export default function View({ blog }) {
     const { id } = router.query;
     const { data } = useSWR(`/api/blog/${id}`, fetcher, { fallbackData: blog })
     return (
-        <Box sx={{ mx: 10, my: 5 }}>
+        <Box sx={{ mx: { md: 10 }, my: 5 }}>
             <Box sx={{ display: "flex", justifyContent: "end", gap: 5 }}>
                 <Button component={Link} href={`/blog/${id}/edit`} variant='contained' >
                     Edit

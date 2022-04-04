@@ -19,7 +19,7 @@ export async function getStaticProps() {
 
 const Blogs = ({ blogs }) => {
     const { data } = useSWR("/api/blog", fetcher, { fallbackData: blogs })
-    const [ addBlogModalOpen, setAddBlogModalOpen ] = useState(false);
+    const [addBlogModalOpen, setAddBlogModalOpen] = useState(false);
     const handleBlogDelete = async (id) => {
         const res = await fetch(`/api/blog/${id}`, {
             method: 'DELETE',
@@ -33,7 +33,7 @@ const Blogs = ({ blogs }) => {
     }
 
     return (
-        <Box sx={{ mx: 10, my: 5 }}>
+        <Box sx={{ mx: { md: 10 }, my: 5 }}>
             <Box sx={{ display: "flex", justifyContent: "end" }}>
                 <Button variant='contained' onClick={() => setAddBlogModalOpen(true)}>
                     Add New
