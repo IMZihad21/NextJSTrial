@@ -1,11 +1,26 @@
 import { Box } from '@mui/material'
+import axios from 'axios'
 import type { NextPage } from 'next'
 
-const Home: NextPage = () => {
+export async function getStaticProps() {
+  const { data } = await axios.get(`${process.env.NEXT_URL}/api`);
+  return {
+    props: { data },
+    revalidate: 1, // In seconds
+  }
+}
+
+interface Props {
+  data: {
+    message: string
+  }
+}
+
+const Home: NextPage<Props> = ({ data }) => {
   return (
     <Box >
       <Box>
-        Login here
+        {data.message}
       </Box>
     </Box>
   )
