@@ -2,11 +2,11 @@ import { Box } from '@mui/material'
 import axios from 'axios'
 import type { NextPage } from 'next'
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const { data } = await axios.get(`${process.env.NEXT_URL}/api`);
   return {
     props: { data },
-    revalidate: 1, // In seconds
+    // revalidate: 1, // In seconds
   }
 }
 
