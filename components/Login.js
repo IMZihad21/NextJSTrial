@@ -1,25 +1,20 @@
 import { Box, Button, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import Router from 'next/router';
-import Cookies from 'js-cookie';
+import axios from 'axios';
+import { useRouter } from 'next/router'
 
 export default function Login({ redirectUrl }) {
+    const router = useRouter();
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const handleLogin = data => {
-        const loginAPI = `${window.location.origin}/api/auth/login`;
-        fetch(loginAPI, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then(res => res.json())
-            .then(res => {
-                Cookies.set('token', res.token)
-                Router.push(redirectUrl)
-            })
+    const handleLogin = async data => {
+        try {
+            await axios.post("/api/auth/login", data);
+            router.push(redirectUrl)
+        } catch (error) {
+            alert(error?.response?.data?.message);
+        }
+
     }
 
     return (

@@ -8,6 +8,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Auth({ redirectUrl }) {
+    console.log(redirectUrl);
     return (
         <Box>
             <Login redirectUrl={redirectUrl} />

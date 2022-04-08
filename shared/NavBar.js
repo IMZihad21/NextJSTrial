@@ -12,13 +12,15 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from '@mui/material';
-import { setLogout } from '../utils/auth';
+import axios from 'axios';
+import { useRouter } from 'next/router'
 
 const pages = [
     { name: 'Blog', url: '/blog' },
 ];
 
 const NavBar = () => {
+    const router = useRouter();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -35,6 +37,15 @@ const NavBar = () => {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+
+    const setLogout = async () => {
+        try {
+            await axios.get("/api/auth/logout");
+            router.push('/auth')
+        } catch (error) {
+            alert(error?.response?.data?.message);
+        }
     };
 
     return (

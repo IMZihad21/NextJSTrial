@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+import { sign } from "jsonwebtoken";
+import { serialize } from "cookie";
 
 const JWT_KEY = process.env.JWT_KEY
 
@@ -30,10 +31,21 @@ export default async function handler(req, res) {
             if (!isValid) {
                 return res.status(401).json({ message: 'Invalid password' })
             }
-            const token = jwt.sign({ id: user.id }, JWT_KEY, { expiresIn: '1h' })
-            // filter password from user
+            const token = sign({ id: user.id }, JWT_KEY, {
+                expiresIn: 60 * 60 * 24 * 7 // 1 week 
+            })
+
+            // set cookie in response
+            res.setHeader('Set-Cookie', serialize('token', token, {
+                httpOnly: true,
+                sameSite: "strict",
+                maxAge: 60 * 60 * 24 * 7, // 1 week
+                path: "/",
+            }))
+
+            // filter password from user and send response
             const { password: _, ...userData } = user
-            res.status(200).json({ token: 'Bearer ' + token, ...userData })
+            res.status(200).json({ ...userData })
             break
 
         default:
